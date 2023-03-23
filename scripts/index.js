@@ -6,26 +6,20 @@ let popup = document.querySelector('.popup');
 let popupName = document.querySelector('#popup__name');
 let popupProffesion = document.querySelector('#popup__proffesion');
 let buttonSave = document.querySelector('.popup__content');
-popupName.value = profileName.textContent;
-popupProffesion.value = profileProffesion.textContent;
-const closePopupClick = function (event) {
-  if(event.target === event.currentTarget) {
-    popupClose();
-  }
-} 
 const popupClose = () => {
   popup.classList.remove('popup_opened');
 };
 const popupOpen = () =>{
+  popupName.value = profileName.textContent;
+  popupProffesion.value = profileProffesion.textContent;
   popup.classList.add('popup_opened');
 }
 const btnSave =(event)=>{
   event.preventDefault();
   profileName.textContent = popupName.value;
   profileProffesion.textContent = popupProffesion.value;
-  popup.classList.remove('popup_opened');
+  popupClose();
 };
 closeIco.addEventListener('click', popupClose);
-popup.addEventListener('click', closePopupClick);
 profileEditor.addEventListener('click',popupOpen);
 buttonSave.addEventListener('submit',btnSave )

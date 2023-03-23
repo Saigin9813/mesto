@@ -8,10 +8,10 @@
 }
 @font-face {
   font-family: "Inter";
-  font-weight: 700;
-  src: url(../vendor/fonts/inter/Inter-Bold.woff) format("woff"),
-  url(../vendor/fonts/inter/Inter-Bold.woff2) format("woff2");
-  font-style: normal;
+  font-weight: 500;
+  src: url(../vendor/fonts/inter/Inter-Medium.woff) format("woff"),
+  url(../vendor/fonts/inter/Inter-Medium.woff2) format("woff2");
+  font-style: medium;
   font-display: swap;
 }
 @font-face {
@@ -19,6 +19,6 @@
   font-weight: 900;
   src: url(../vendor/fonts/inter/Inter-Black.woff) format("woff"),
   url(../vendor/fonts/inter/Inter-Black.woff2) format("woff2");
-  font-style: normal;
+  font-style: bold;
   font-display: swap;
 }

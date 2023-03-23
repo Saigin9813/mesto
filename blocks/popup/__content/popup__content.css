@@ -1,14 +1,13 @@
 .popup__content{
+  margin: 34px auto 37px;
   max-width: 358px;
-  margin: 0 auto;
   padding: 0;
   display: flex;
   flex-direction: column;
-  margin-bottom: 37px;
-  overflow: visible;
 }
 @media screen and (max-width: 700px){
   .popup__content{
+    margin: 25px auto;
     max-width: 238px;
   }
 }
