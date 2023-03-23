@@ -1,0 +1,9 @@
+.elements__card{
+  background-color: #fff;
+  border-radius: 10px;
+  max-width: 100%;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 282px 1fr;
+  position: relative;
+}
