@@ -19,6 +19,7 @@
     width: 100%;
     max-width: 282px;
     background-size: 16px 16px;
+    margin: 0 auto;
     margin-top: 35px;
   }
 }
