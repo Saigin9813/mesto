@@ -1,7 +1,8 @@
 .popup__button-save{
-  border-radius: 3px;
+  border-radius: 2px;
   margin: 0;
   padding: 0;
+  margin-bottom: 37px;
   background-color: #000;
   height: 50px;
   font-size: 18px;
