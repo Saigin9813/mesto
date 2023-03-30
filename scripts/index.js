@@ -6,7 +6,7 @@ let profileAdd = document.querySelector('.profile__add');
 
 let popups = document.querySelectorAll('.popup');
 let popupAddImage = document.querySelector('.popup_image');
-let popupEdit = document.querySelector('.popup__edit');
+let popupEdit = document.querySelector('.popup_edit');
 let popupName = document.querySelector('.popup__profile');
 let popupProffesion = document.querySelector('.popup__proffesion');
 
