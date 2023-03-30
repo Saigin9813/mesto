@@ -5,13 +5,13 @@ let profileAdd = document.querySelector('.profile__add');
 
 
 let popups = document.querySelectorAll('.popup');
-let popupAddImage = document.querySelector('.popup__image');
+let popupAddImage = document.querySelector('.popup_image');
 let popupEdit = document.querySelector('.popup__edit');
 let popupName = document.querySelector('.popup__profile');
 let popupProffesion = document.querySelector('.popup__proffesion');
 
 
-let popupZoom = document.querySelector('.popup__zoom');
+let popupZoom = document.querySelector('.popup_zoom');
 let imageZoom = popupZoom.querySelector('.popup__img');
 let zoomTtile = popupZoom.querySelector('.popup__zoom_title');
 
