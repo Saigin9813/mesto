@@ -13,7 +13,7 @@ let popupProffesion = document.querySelector('.popup__proffesion');
 
 let popupZoom = document.querySelector('.popup_zoom');
 let imageZoom = popupZoom.querySelector('.popup__img');
-let zoomTtile = popupZoom.querySelector('.popup__zoom_title');
+let zoomTtile = popupZoom.querySelector('.popup__zoom-title');
 
 
 let buttonSave = document.querySelector('.popup__content');
