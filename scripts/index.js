@@ -8,14 +8,14 @@ const mestoAdd = document.querySelector('.profile__add');//Кнопка доба
 
 const popups = document.querySelectorAll('.popup');//Находим все popup
 
-const popupAddImage = document.querySelector('.popup__type_add-mesto');//Находим popup с добавлением карточек
-const popupEdit = document.querySelector('.popup__type_edit_profile');//Находим popup с измением профиля
-const popupZoom = document.querySelector('.popup__type_open-image');//Находим popup с увилечением изоброжения
+const popupAddImage = document.querySelector('.popup_edit-profile');//Находим popup с добавлением карточек
+const popupEdit = document.querySelector('.popup_add-mesto');//Находим popup с измением профиля
+const popupZoom = document.querySelector('.popup_open-image');//Находим popup с увилечением изоброжения
 
 const popupProfile = document.querySelector('.popup__input_type-name');//Находим инпут с именем
 const popupProffesion = document.querySelector('.popup__input_type-proffession');//Находим инпут с профессией
-const nameMesto = document.querySelector('.popup__type_name-mesto');//Находим инпут с названием места
-const imageMesto = document.querySelector('.popup__type_image-mesto');//Находим инпут с добавлением ссылки на картинку
+const nameMesto = document.querySelector('.popup__input_name-mesto');//Находим инпут с названием места
+const imageMesto = document.querySelector('.popup__input_image-mesto');//Находим инпут с добавлением ссылки на картинку
 
 const imageZoom = popupZoom.querySelector('.popup__img');// Поле с картинкой
 const zoomTtile = popupZoom.querySelector('.popup__zoom-title');// Поле с подписью к картинке
