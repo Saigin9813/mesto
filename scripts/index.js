@@ -8,14 +8,14 @@ const mestoAdd = document.querySelector('.profile__add');//Кнопка доба
 
 const popups = document.querySelectorAll('.popup');//Находим все popup
 
-const popupAddImage = document.querySelector('.popup_edit-profile');//Находим popup с добавлением карточек
-const popupEdit = document.querySelector('.popup_add-mesto');//Находим popup с измением профиля
-const popupZoom = document.querySelector('.popup_open-image');//Находим popup с увилечением изоброжения
+const popupEdit = document.querySelector('.popup_content_edit-profile');//Находим popup с добавлением карточек
+const popupAddImage = document.querySelector('.popup_content_add-mesto');//Находим popup с измением профиля
+const popupZoom = document.querySelector('.popup_content_zoom-image');//Находим popup с увилечением изоброжения
 
-const popupProfile = document.querySelector('.popup__input_type-name');//Находим инпут с именем
-const popupProffesion = document.querySelector('.popup__input_type-proffession');//Находим инпут с профессией
-const nameMesto = document.querySelector('.popup__input_name-mesto');//Находим инпут с названием места
-const imageMesto = document.querySelector('.popup__input_image-mesto');//Находим инпут с добавлением ссылки на картинку
+const popupInputProfile = document.querySelector('.popup__input_type-name');//Находим инпут с именем
+const popupInputProffesion = document.querySelector('.popup__input_type-proffession');//Находим инпут с профессией
+const nameMesto = document.querySelector('.popup__input_type_name-mesto');//Находим инпут с названием места
+const imageMesto = document.querySelector('.popup__input_type_image-mesto');//Находим инпут с добавлением ссылки на картинку
 
 const imageZoom = popupZoom.querySelector('.popup__img');// Поле с картинкой
 const zoomTtile = popupZoom.querySelector('.popup__zoom-title');// Поле с подписью к картинке
@@ -37,8 +37,8 @@ const closePopup = (popup) => {
 }
 // Открытия окна с редактрированиям профиля
 const openPopupProfile = () =>{
-  popupProfile.value = profileName.textContent;
-  popupProffesion.value = profileProffesion.textContent;
+  popupInputProfile.value = profileName.textContent;
+  popupInputProffesion.value = profileProffesion.textContent;
   openPopup(popupEdit);
 }
 profileEditor.addEventListener('click',openPopupProfile);
@@ -54,7 +54,7 @@ const closePopupIco = (popup)=>{
   popup.forEach((evt) => {
   const closeIco = evt.querySelector('.popup__close-button');
     closeIco.addEventListener('click', () => {
-    evt.classList.remove('popup_opened');
+    closePopup(evt);
  })
 })}
 closePopupIco(popups);
@@ -75,43 +75,45 @@ const activeLike =(likeItem)=> {
 // Функция клика на картинку и открытия ее в popup
 const  openPopupZoom = (popup, image,title)=>{ 
   image.addEventListener('click', () =>{
-  popup.classList.add('popup_opened');
+  openPopup(popup);
   imageZoom.src = image.src;
+  imageZoom.alt = title.textContent
   zoomTtile.textContent = title.textContent;
 })}
 const addCard = (template) =>{
   element.prepend(template);
 }
 // Функция добавление карточек из массива
-const addCards = (arr) => { 
-  arr.forEach((elements) => {
-  // Клонируем tepmlate и заполняем его данными из массива
+const addCards = (titleCard,imageCard) => { 
+  // Клонируем tepmlate и создаем картчоку
     const elementsTemplate = cardsTemplate.querySelector('.elements__card').cloneNode(true);
-    elementsTemplate.querySelector('.elements__title').textContent = elements.name;
-    elementsTemplate.querySelector('.elements__image').src = elements.link;
-    elementsTemplate.querySelector('.elements__image').alt = elements.name;
-
-  // Осуществляем поиск нужных элементов в сохданных карточках
     const image = elementsTemplate.querySelector('.elements__image');
     const title = elementsTemplate.querySelector('.elements__title');
+    title.textContent = titleCard;
+    image.src = imageCard;
+    image.alt = titleCard;
+
+  // Осуществляем поиск нужных элементов в сохданных карточках
     const deleteCardsButton = elementsTemplate.querySelector('.cards__delete');
     const likeActive = elementsTemplate.querySelector('.elements__like');
-    element.append(elementsTemplate);
-
+    
+    // Добавлеем разный функционал(лайк,zoom и т.д)
     deleteCard(deleteCardsButton,elementsTemplate);
     activeLike(likeActive);
     openPopupZoom(popupZoom,image,title);
-})
-};
+    addCard(elementsTemplate);
+}
 // Функция добавления карточки
 
-addCards(initialCards);
-
+initialCards.forEach((cards)=>{
+  // console.log(cards.name);
+  addCards(cards.name,cards.link);
+})
 // Функция изменения профиля 
 const saveProfileButton = (event) => {
   event.preventDefault();
-  profileName.textContent = popupProfile.value;
-  profileProffesion.textContent = popupProffesion.value;
+  profileName.textContent = popupInputProfile.value;
+  profileProffesion.textContent = popupInputProffesion.value;
   closePopup(popupEdit);
 };
 formEdit.addEventListener('submit',saveProfileButton);
@@ -119,19 +121,11 @@ formEdit.addEventListener('submit',saveProfileButton);
 
 const addMestoButton = (event) =>{
   event.preventDefault();
-  const getElement = cardsTemplate.querySelector('.elements__card').cloneNode(true);
-  const image = getElement.querySelector('.elements__image');
-  const title = getElement.querySelector('.elements__title');
-  const deleteCardsButton = getElement.querySelector('.cards__delete');
-  const likeActive = getElement.querySelector('.elements__like');
-  image.src = imageMesto.value;
-  image.alt = nameMesto.value;
-  title.textContent = nameMesto.value;
 
-  deleteCard(deleteCardsButton,getElement);
-  activeLike(likeActive);
-  openPopupZoom(popupZoom,image,title);
-  addCard(getElement);
+  const image = imageMesto.value;
+  const title = nameMesto.value;
+  
+  addCards(title,image);
   closePopup(popupAddImage);
   formMesto.reset();
 }
