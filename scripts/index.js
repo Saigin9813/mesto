@@ -81,9 +81,9 @@ const  openPopupZoom = (popup, image,title)=>{
   zoomTtile.textContent = title.textContent;
 })}
 const addCard = (template) =>{
-  element.prepend(template);
+   element.prepend(template);
 }
-// Функция добавление карточек из массива
+// Функция Создания карточки
 const addCards = (titleCard,imageCard) => { 
   // Клонируем tepmlate и создаем картчоку
     const elementsTemplate = cardsTemplate.querySelector('.elements__card').cloneNode(true);
@@ -101,14 +101,14 @@ const addCards = (titleCard,imageCard) => {
     deleteCard(deleteCardsButton,elementsTemplate);
     activeLike(likeActive);
     openPopupZoom(popupZoom,image,title);
-    addCard(elementsTemplate);
+    return elementsTemplate;
 }
-// Функция добавления карточки
 
+// Функция добавления карточки
 initialCards.forEach((cards)=>{
-  // console.log(cards.name);
-  addCards(cards.name,cards.link);
+  addCard(addCards(cards.name,cards.link));
 })
+
 // Функция изменения профиля 
 const saveProfileButton = (event) => {
   event.preventDefault();
@@ -125,7 +125,7 @@ const addMestoButton = (event) =>{
   const image = imageMesto.value;
   const title = nameMesto.value;
   
-  addCards(title,image);
+  addCard(addCards(title,image));
   closePopup(popupAddImage);
   formMesto.reset();
 }
