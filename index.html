@@ -27,26 +27,31 @@
       <footer class="footer">
         <p class="footer__copyrigth">&#169; 2023 Mesto Russia</p>
       </footer>
-      
+<!-- Popup редактирования профиля -->
   <div class="popup popup_content_edit-profile">
     <div class="popup__container">
       <button type="button" class="popup__close-button" aria-label="Закрыть"></button>
-      <form name="profile-edit" class="popup__content popup__content_type_edit-profile">
+      <form name="profile-edit" class="popup__form popup__content_type_edit-profile" novalidate>
         <h2 class="popup__title">Редактировать профиль</h2>
-        <input type="text" name="username" class="popup__input popup__input_type-name" placeholder="Имя" required autocomplete="off">
-        <input type="text" name="proffesion" class="popup__input popup__input_type-proffession " placeholder="О себе" required autocomplete="off">
-        <button type="submit" class="popup__button-save popup__button-submit" aria-label="Кнопка сохранить">Сохранить</button>
+        <input type="text" name="username" class="popup__input popup__input_type-name" placeholder="Имя" required autocomplete="off" minlength="2" maxlength="40">
+        <span id="username-error" class="popup__error"></span>
+        <input type="text" name="proffesion" class="popup__input popup__input_type-proffession" placeholder="О себе" required autocomplete="off" minlength="2" maxlength="200" >
+        <span id="proffesion-error" class="popup__error"></span>
+        <button type="submit" class="popup__button" aria-label="Кнопка сохранить">Сохранить</button>
       </form>
     </div>
   </div>
+<!-- Popup добавление карточки -->
   <div class="popup popup_content_add-mesto">
     <div class="popup__container popup__container_type_mesto">
       <button type="button" class="popup__close-button" aria-label="Закрыть"></button>
-      <form name="mesto-add" class="popup__content popup__content_type_add-mesto">
+      <form name="mesto-add" class="popup__form popup__content_type_add-mesto" novalidate>
         <h2 class="popup__title">Новое место</h2>
-        <input type="text" name="name-mesto" class="popup__input popup__input_type_name-mesto" placeholder="Название" required autocomplete="off">
+        <input type="text" name="title" class="popup__input popup__input_type_name-mesto " placeholder="Название" required autocomplete="off" minlength="2" maxlength="30">
+        <span id="title-error" class="popup__error"></span>
         <input type="url" name="link-image" class="popup__input popup__input_type_image-mesto" placeholder="Ссылка на картинку" required autocomplete="off">
-        <button type="submit" class="popup__button-save popup__button-submit" aria-label="Кнопка сохранить">Сохранить</button>
+        <span id="link-image-error" class="popup__error"></span>
+        <button type="submit" class="popup__button" aria-label="Кнопка сохранить">Сохранить</button>
       </form>
     </div>
   </div>
@@ -69,5 +74,6 @@
   </template>
   <script type="module" src="scripts/cards.js"></script>
   <script type="module" src="scripts/index.js"></script>
+  <script src="scripts/validate.js"></script>
 </body>
 </html>

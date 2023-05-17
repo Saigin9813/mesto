@@ -29,11 +29,13 @@ const element = document.querySelector('.element');//Ищем секцию ку�
 
 // Функция открытия popup-ов
 const openPopup = (popup)=>{
-  popup.classList.add('popup_opened')
+  popup.classList.add('popup_opened');
+  document.addEventListener('keyup', closePopupEcs);
 }
 // Функция закрытия popup
 const closePopup = (popup) => {
   popup.classList.remove('popup_opened');
+  document.removeEventListener('keyup', closePopupEcs);
 }
 // Открытия окна с редактрированиям профиля
 const openPopupProfile = () =>{
@@ -118,6 +120,25 @@ const saveProfileButton = (event) => {
 };
 formEdit.addEventListener('submit',saveProfileButton);
 
+// Функция закрытия popop по overlay и Ecs
+const closePopupEcs = (evt) =>{
+  evt.preventDefault();
+    if (evt.key === 'Escape'){
+      const activePopup = document.querySelector('.popup_opened');
+      closePopup(activePopup);
+    }
+}
+const closePopupOverlay = (popup) =>{
+  popup.forEach((i)=>{
+    i.addEventListener('click', (event)=>{
+      if(event.target === i){
+        closePopup(i);
+      }
+    })
+  });
+}
+closePopupOverlay(popups);
+
 
 const addMestoButton = (event) =>{
   event.preventDefault();
@@ -130,6 +151,3 @@ const addMestoButton = (event) =>{
   formMesto.reset();
 }
 formMesto.addEventListener('submit',addMestoButton);
-
-
-
