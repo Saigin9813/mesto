@@ -21,8 +21,8 @@ const imageZoom = popupZoom.querySelector('.popup__img');// Поле с карт
 const zoomTtile = popupZoom.querySelector('.popup__zoom-title');// Поле с подписью к картинке
 
 
-const formEdit = document.querySelector('.popup__content_type_edit-profile');///Ищем форму у popup с измением профиля
-const formMesto = document.querySelector('.popup__content_type_add-mesto');//Ищем форму у popup с добавленим места
+const formEdit = document.querySelector('.popup__form_type_edit-profile');///Ищем форму у popup с измением профиля
+const formMesto = document.querySelector('.popup__form_type_add-mesto');//Ищем форму у popup с добавленим места
 
 const element = document.querySelector('.element');//Ищем секцию куда будем вставлять картинки
 
