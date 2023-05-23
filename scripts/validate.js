@@ -1,3 +1,5 @@
+export{disableButton,configFrormSelector};
+
 const showError = (inputElement, errorElement,config)=>{
   inputElement.classList.add(config.inputErrorClass);
   errorElement.textContent = inputElement.validationMessage;
@@ -72,4 +74,3 @@ const configFrormSelector = {
 }; 
 
 enableValidation(configFrormSelector);
-export{disableButton,configFrormSelector};
