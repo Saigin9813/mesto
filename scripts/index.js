@@ -1,9 +1,11 @@
 import { initialCards } from "./cards.js";
+import { disableButton} from "./validate.js";
 
 const profileEditor = document.querySelector('.profile__editor');//кнопка редактирования профиля
 const profileName = document.querySelector('.profile__name');// Поле с именем на странице
 const profileProffesion = document.querySelector('.profile__proffesion');// Поле с профессией на стринце
 const mestoAdd = document.querySelector('.profile__add');//Кнопка добавления места
+const saveButton = document.querySelectorAll('.popup__button')
 
 
 const popups = document.querySelectorAll('.popup');//Находим все popup
@@ -30,12 +32,12 @@ const element = document.querySelector('.element');//Ищем секцию ку�
 // Функция открытия popup-ов
 const openPopup = (popup)=>{
   popup.classList.add('popup_opened');
-  document.addEventListener('keyup', closePopupEcs);
+  document.addEventListener('keyup', closePopupByEcs);
 }
 // Функция закрытия popup
 const closePopup = (popup) => {
   popup.classList.remove('popup_opened');
-  document.removeEventListener('keyup', closePopupEcs);
+  document.removeEventListener('keyup', closePopupByEcs);
 }
 // Открытия окна с редактрированиям профиля
 const openPopupProfile = () =>{
@@ -48,28 +50,29 @@ profileEditor.addEventListener('click',openPopupProfile);
 // Откртыия окна с добавлением места
 const openPopupMesto = ()=>{
   openPopup(popupAddImage);
+  disableButton(popupAddImage.querySelector('.popup__button'),configFrormSelector)
 }
 mestoAdd.addEventListener('click', openPopupMesto);
 
 // Закрытия popup по нажатию крестик
-const closePopupIco = (popup)=>{
-  popup.forEach((evt) => {
+const initClosePopupByIcon = (popups)=>{
+  popups.forEach((evt) => {
   const closeIco = evt.querySelector('.popup__close-button');
     closeIco.addEventListener('click', () => {
     closePopup(evt);
  })
 })}
-closePopupIco(popups);
+initClosePopupByIcon(popups);
 
 const cardsTemplate = document.querySelector('#elements-template').content;
 // Функция удаления карточки
-const deleteCard = (button,template) =>{
+const initDeleteCard = (button,card) =>{
   button.addEventListener('click', ()=>{
-    template.remove();
+    card.remove();
 })}
 
 // Функция клика лайк и закрашивание 
-const activeLike =(likeItem)=> {
+const initLike =(likeItem)=> {
   likeItem.addEventListener('click', (evt) => {
   evt.target.classList.toggle('elements__like_active');
 })}
@@ -86,7 +89,7 @@ const addCard = (template) =>{
    element.prepend(template);
 }
 // Функция Создания карточки
-const addCards = (titleCard,imageCard) => { 
+const createCard = (titleCard,imageCard) => { 
   // Клонируем tepmlate и создаем картчоку
     const elementsTemplate = cardsTemplate.querySelector('.elements__card').cloneNode(true);
     const image = elementsTemplate.querySelector('.elements__image');
@@ -100,15 +103,15 @@ const addCards = (titleCard,imageCard) => {
     const likeActive = elementsTemplate.querySelector('.elements__like');
     
     // Добавлеем разный функционал(лайк,zoom и т.д)
-    deleteCard(deleteCardsButton,elementsTemplate);
-    activeLike(likeActive);
+    initDeleteCard(deleteCardsButton,elementsTemplate);
+    initLike(likeActive);
     openPopupZoom(popupZoom,image,title);
     return elementsTemplate;
 }
 
 // Функция добавления карточки
 initialCards.forEach((cards)=>{
-  addCard(addCards(cards.name,cards.link));
+  addCard(createCard(cards.name,cards.link));
 })
 
 // Функция изменения профиля 
@@ -121,33 +124,34 @@ const saveProfileButton = (event) => {
 formEdit.addEventListener('submit',saveProfileButton);
 
 // Функция закрытия popop по overlay и Ecs
-const closePopupEcs = (evt) =>{
+const closePopupByEcs = (evt) =>{
   evt.preventDefault();
     if (evt.key === 'Escape'){
       const activePopup = document.querySelector('.popup_opened');
       closePopup(activePopup);
     }
 }
-const closePopupOverlay = (popup) =>{
-  popup.forEach((i)=>{
-    i.addEventListener('click', (event)=>{
-      if(event.target === i){
-        closePopup(i);
+const initClosePopupByOverlay = (popups) =>{
+  popups.forEach((popup)=>{
+    popup.addEventListener('click', (event)=>{
+      if(event.target === popup){
+        closePopup(popup);
       }
     })
   });
 }
-closePopupOverlay(popups);
+initClosePopupByOverlay(popups);
 
 
-const addMestoButton = (event) =>{
+const addNewMesto = (event) =>{
   event.preventDefault();
 
   const image = imageMesto.value;
   const title = nameMesto.value;
   
-  addCard(addCards(title,image));
+  addCard(createCard(title,image));
   closePopup(popupAddImage);
   formMesto.reset();
+
 }
-formMesto.addEventListener('submit',addMestoButton);
+formMesto.addEventListener('submit',addNewMesto);
