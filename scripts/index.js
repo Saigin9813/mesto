@@ -1,5 +1,5 @@
 import { initialCards } from "./cards.js";
-import { disableButton} from "./validate.js";
+import { disableButton, configFrormSelector} from "./validate.js";
 
 const profileEditor = document.querySelector('.profile__editor');//кнопка редактирования профиля
 const profileName = document.querySelector('.profile__name');// Поле с именем на странице
@@ -50,7 +50,7 @@ profileEditor.addEventListener('click',openPopupProfile);
 // Откртыия окна с добавлением места
 const openPopupMesto = ()=>{
   openPopup(popupAddImage);
-  disableButton(popupAddImage.querySelector('.popup__button'),configFrormSelector)
+  disableButton(popupAddImage.querySelector('.popup__button'),configFrormSelector);
 }
 mestoAdd.addEventListener('click', openPopupMesto);
 
