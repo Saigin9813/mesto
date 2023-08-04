@@ -1,22 +1,13 @@
 
 import { initialCards } from "./constants.js";
 import {configFormSelector} from "./constants.js";
-import Card  from "./card.js";
-import FormFalidator from "./validate.js";
-
-initialCards.forEach((item) =>{
-  const card = new Card(item, '.elements-template');
-  const cardElement = card.generateCard();
-  // Добавляем в DOM
-  document.querySelector('.element').append(cardElement);
-});
-
+import Card  from "./Card.js";
+import FormFalidator from "./FormValidator.js";
 
 const profileEditor = document.querySelector('.profile__editor');//кнопка редактирования профиля 
 const profileName = document.querySelector('.profile__name');// Поле с именем на странице
 const profileProffesion = document.querySelector('.profile__proffesion');// Поле с профессией на стринце
 const mestoAdd = document.querySelector('.profile__add');//Кнопка добавления места
-const saveButton = document.querySelectorAll('.popup__button');
 const popups = document.querySelectorAll('.popup');//Находим все popup
 const popupEdit = document.querySelector('.popup_content_edit-profile');//Находим popup с добавлением карточек
 const popupAddImage = document.querySelector('.popup_content_add-mesto');//Находим popup с измением профиля
@@ -31,6 +22,19 @@ const zoomTtile = popupZoom.querySelector('.popup__zoom-title');// Поле с �
 const formEdit = document.querySelector('.popup__form_type_edit-profile');///Ищем форму у popup с измением профиля
 const formMesto = document.querySelector('.popup__form_type_add-mesto');//Ищем форму у popup с добавленим места
 
+initialCards.forEach((item) =>{
+  const card = new Card(item, '.elements-template');
+  const cardElement = card.generateCard();
+  // Добавляем в DOM
+  document.querySelector('.element').append(cardElement);
+});
+
+
+const valid = new FormFalidator(configFormSelector,popupEdit);
+valid.enableValidation();
+
+const validAddMesto = new FormFalidator(configFormSelector,popupAddImage);
+validAddMesto.enableValidation();
 
 // Функция открытия popup-ов
 const openPopup = (popup)=>{
@@ -54,6 +58,8 @@ profileEditor.addEventListener('click',openPopupProfile);
 // Откртыия окна с добавлением места
 const openPopupMesto = ()=>{
   openPopup(popupAddImage);
+  valid.enableValidation();
+
 }
 
 mestoAdd.addEventListener('click', openPopupMesto);
@@ -72,25 +78,11 @@ initClosePopupByIcon(popups);
 // Функция удаления карточки
 
 // Функция клика на картинку и открытия ее в popup
-const  openPopupZoom = (popup, image,title)=>{
-  openPopup(popup);
-  imageZoom.src = image.src;
-  imageZoom.alt = title.textContent;
-  zoomTtile.textContent = title.textContent;
-}
-
-export {openPopupZoom,openPopup};
-
-// Функция Создания карточки
-const createCard = (titleCard,imageCard) => {
-  // Клонируем tepmlate и создаем картчоку
-    const elementsTemplate = cardsTemplate.querySelector('.elements__card').cloneNode(true);
-    const image = elementsTemplate.querySelector('.elements__image'); 
-    const title = elementsTemplate.querySelector('.elements__title');
-    title.textContent = titleCard;
-    image.src = imageCard;
-    image.alt = titleCard;
-    return elementsTemplate;
+const  openPopupZoom = (link,title)=>{
+  openPopup(popupZoom);
+  imageZoom.src = link.src;
+  imageZoom.alt = title;
+  zoomTtile.textContent = title;
 }
 
 // Функция изменения профиля  
@@ -125,16 +117,18 @@ initClosePopupByOverlay(popups);
 
 const addNewMesto = (event) =>{
   event.preventDefault();
-  const image = imageMesto.value; 
-  const title = nameMesto.value; 
-  addCard(createCard(title,image)); 
+  const item = {
+    name: nameMesto.value,
+    link: imageMesto.value
+  }
+  const card = new Card(item, '.elements-template');
+  const cardElement = card.generateCard();
+  // Добавляем в DOM
+  document.querySelector('.element').prepend(cardElement);
   closePopup(popupAddImage);
   formMesto.reset();
 } 
 
 formMesto.addEventListener('submit',addNewMesto);
 
-const valid = new FormFalidator(configFormSelector,popupEdit);
-valid.enableValidation();
-const validAddMesto = new FormFalidator(configFormSelector,popupAddImage);
-validAddMesto.enableValidation();
+export {openPopupZoom,openPopup};
