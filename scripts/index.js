@@ -1,8 +1,6 @@
-
-import { initialCards } from "./constants.js";
-import {configFormSelector} from "./constants.js";
+import { initialCards, configFormSelector } from "./constants.js";
 import Card  from "./Card.js";
-import FormFalidator from "./FormValidator.js";
+import FormValidator from "./FormValidator.js";
 
 const profileEditor = document.querySelector('.profile__editor');//кнопка редактирования профиля 
 const profileName = document.querySelector('.profile__name');// Поле с именем на странице
@@ -22,19 +20,14 @@ const zoomTtile = popupZoom.querySelector('.popup__zoom-title');// Поле с �
 const formEdit = document.querySelector('.popup__form_type_edit-profile');///Ищем форму у popup с измением профиля
 const formMesto = document.querySelector('.popup__form_type_add-mesto');//Ищем форму у popup с добавленим места
 
-initialCards.forEach((item) =>{
-  const card = new Card(item, '.elements-template');
-  const cardElement = card.generateCard();
-  // Добавляем в DOM
-  document.querySelector('.element').append(cardElement);
-});
 
+// Добавляем валидацию для Popup редактирования профиля
+const formEditValidator = new FormValidator(configFormSelector,formEdit);
+formEditValidator.enableValidation();
 
-const valid = new FormFalidator(configFormSelector,popupEdit);
-valid.enableValidation();
-
-const validAddMesto = new FormFalidator(configFormSelector,popupAddImage);
-validAddMesto.enableValidation();
+// Добавляем валидацию для Popup добавления места 
+const formMestoValidator = new FormValidator(configFormSelector,formMesto);
+formMestoValidator.enableValidation();
 
 // Функция открытия popup-ов
 const openPopup = (popup)=>{
@@ -58,7 +51,7 @@ profileEditor.addEventListener('click',openPopupProfile);
 // Откртыия окна с добавлением места
 const openPopupMesto = ()=>{
   openPopup(popupAddImage);
-  valid.enableValidation();
+  formMestoValidator.enableValidation();
 
 }
 
@@ -75,7 +68,6 @@ const initClosePopupByIcon = (popups)=>{
 
 initClosePopupByIcon(popups); 
 
-// Функция удаления карточки
 
 // Функция клика на картинку и открытия ее в popup
 const  openPopupZoom = (link,title)=>{
@@ -95,7 +87,7 @@ const saveProfileButton = (event) => {
 
 formEdit.addEventListener('submit',saveProfileButton);
 
-// Функция закрытия popop по overlay и Ecs 
+// Функция закрытия popop по Ecs 
 const closePopupByEcs = (evt) =>{
   evt.preventDefault();
     if (evt.key === 'Escape'){
@@ -103,6 +95,8 @@ const closePopupByEcs = (evt) =>{
       closePopup(activePopup);
     }
 }
+
+// Функция закрытия popop по overlay
 const initClosePopupByOverlay = (popups) =>{
   popups.forEach((popup)=>{ 
     popup.addEventListener('click', (event)=>{
@@ -113,18 +107,29 @@ const initClosePopupByOverlay = (popups) =>{
   });
 } 
 
+const createCard = (item) => {
+    // Клонируем tepmlate и создаем картчоку
+  const card = new Card(item, '.elements-template');
+  return card.generateCard();
+  // Добавляем в DOM
+  }
+
 initClosePopupByOverlay(popups);
 
+initialCards.forEach((item) =>{
+  // createCard(item);
+  document.querySelector('.element').append(createCard(item));
+
+});
+// Добавление новой карточки через форму
 const addNewMesto = (event) =>{
   event.preventDefault();
-  const item = {
-    name: nameMesto.value,
-    link: imageMesto.value
-  }
-  const card = new Card(item, '.elements-template');
-  const cardElement = card.generateCard();
-  // Добавляем в DOM
-  document.querySelector('.element').prepend(cardElement);
+  const item = { 
+    name: nameMesto.value, 
+    link: imageMesto.value 
+  } 
+  
+  document.querySelector('.element').prepend(createCard(item));
   closePopup(popupAddImage);
   formMesto.reset();
 } 
