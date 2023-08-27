@@ -47,10 +47,6 @@ const userInfo = new UserInfo({
   userProffesion: '.profile__proffesion'
 });
 
-const currentUserInfo = userInfo.getUserInfo();
-
-inputTypeName.value = currentUserInfo.userName;
-inputTypeProffesion.value = currentUserInfo.userProffesion;
 
 const mestoPopupWithForm = new PopupWithForm('.popup_content_add-mesto',
 ({name,link})=>{
@@ -63,5 +59,12 @@ profilePopupWithForm.setEventListeners();
 mestoPopupWithForm.setEventListeners();
 popupWithImage.setEventListeners();
 
-profileEditorButton.addEventListener('click', profilePopupWithForm.open.bind(profilePopupWithForm));
+profileEditorButton.addEventListener('click',()=>{
+const {userName,userProffesion} = userInfo.getUserInfo();
+inputTypeName.value = userName;
+inputTypeProffesion.value = userProffesion;
+profilePopupWithForm.open()
+});
+
 addMesoButton.addEventListener('click',mestoPopupWithForm.open.bind(mestoPopupWithForm))
+
