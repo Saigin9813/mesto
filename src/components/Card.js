@@ -1,10 +1,9 @@
-import { openPopupZoom } from "./index.js";
-
 export default class Card {
-  constructor(data,templateSelector){
-    this._title = data.name;
-    this._link = data.link;
+  constructor(title, link,templateSelector,handleCardClick){
+    this._title = title;
+    this._link = link;
     this._templateSelector = templateSelector;
+    this._handleCardClick = handleCardClick;
   }
 
   _getTemplate(){
@@ -51,7 +50,7 @@ export default class Card {
       this._likeAdd();
     })
     this._image.addEventListener('click', ()=>{
-      openPopupZoom(this._image,this._title);
+      this._handleCardClick(this._title, this._link);
     })
   }
 

@@ -1,3 +1,11 @@
+const profileEditorButton = document.querySelector('.profile__editor');
+const addMesoButton = document.querySelector('.profile__add');
+const inputTypeName = document.querySelector('.popup__input_type-name');
+const inputTypeProffesion = document.querySelector('.popup__input_type-proffession');
+
+const formEdit = document.querySelector('.popup__form_type_edit-profile');///Ищем форму у popup с измением профиля
+const formMesto = document.querySelector('.popup__form_type_add-mesto');//Ищем форму у popup с добавленим места
+
 const initialCards = [
   {
     name: 'Архыз',
@@ -34,5 +42,12 @@ const configFormSelector = {
   errorClass: 'popup__error_visible' 
 }; 
 
-
+export {
+  profileEditorButton,
+  addMesoButton,
+  inputTypeName,
+  inputTypeProffesion,
+  formEdit,
+  formMesto}
+  
 export {initialCards, configFormSelector};

@@ -5,15 +5,14 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mesto</title>
-  <link rel="stylesheet" href="pages/index.css">
 </head>
 <body class="page">
     <header class="header">
-      <img src="images/logo.svg" alt="Логотип" class="header__logo">
+      <img src="<%=require('./images/logo.svg')%>" alt="Логотип" class="header__logo">
     </header>
     <main class="main">
       <section class="profile">
-          <img src="images/Avatar.png" alt="Аватар пользователя" class="profile__avatar">
+          <img src="<%=require('./images/Avatar.png')%>" alt="Аватар пользователя" class="profile__avatar">
         <div class="profile__info">
           <h1 class="profile__name">Жак-Ив Кусто</h1>
           <button type="button" class="profile__editor" aria-label="Редактировать профиль"></button>
@@ -23,7 +22,7 @@
       </section>
       <section class="element">
       </section>
-          </main>
+    </main>
       <footer class="footer">
         <p class="footer__copyrigth">&#169; 2023 Mesto Russia</p>
       </footer>
@@ -47,9 +46,9 @@
       <button type="button" class="popup__close-button" aria-label="Закрыть"></button>
       <form name="mesto-add" class="popup__form popup__form_type_add-mesto" novalidate>
         <h2 class="popup__title">Новое место</h2>
-        <input type="text" name="title" class="popup__input popup__input_type_name-mesto " placeholder="Название" required autocomplete="off" minlength="2" maxlength="30">
+        <input type="text" name="name" class="popup__input popup__input_type_name-mesto " placeholder="Название" required autocomplete="off" minlength="2" maxlength="30">
         <span id="title-error" class="popup__error"></span>
-        <input type="url" name="link-image" class="popup__input popup__input_type_image-mesto" placeholder="Ссылка на картинку" required autocomplete="off">
+        <input type="url" name="link" class="popup__input popup__input_type_image-mesto" placeholder="Ссылка на картинку" required autocomplete="off">
         <span id="link-image-error" class="popup__error"></span>
         <button type="submit" class="popup__button" aria-label="Кнопка сохранить">Сохранить</button>
       </form>
@@ -72,6 +71,5 @@
       </div>
     </article>
   </template>
-  <script type="module" src="scripts/index.js"></script>
 </body>
 </html>
