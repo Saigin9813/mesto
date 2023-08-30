@@ -68,3 +68,36 @@ profilePopupWithForm.open()
 
 addMesoButton.addEventListener('click',mestoPopupWithForm.open.bind(mestoPopupWithForm))
 
+
+form.addEventListener('submit', function submit(e) {
+  e.preventDefault();
+  search(form.elements.entity.value,form.elements.entityId.value)
+    .then(res =>{
+   if(res.statusText === 'OK'){
+     console.log('Все хорошо');
+   }
+  })
+});
+form.addEventListener('submit', function submit(e) {
+  e.preventDefault();
+  renderLoading(true)
+search(form.elements.entity.value, form.elements.entityId.value)
+    .then((res) => {
+      if (res.ok) {
+        return res.json(); // возвращаем вызов метода json
+      }
+
+      // иначе отклоняем промис, чтобы перейти в catch
+      return Promise.reject(res.status);
+    })
+    .then((res) => {
+      renderResult(res.name)
+    })
+    .catch((err) => {
+  renderError(`Ошибка: ${err}`)
+      // выведите в консоль сообщение: `Ошибка: ${err}`
+    })
+  .finally(() =>{
+    renderLoading(true)
+  });
+})
