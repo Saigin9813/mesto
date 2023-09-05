@@ -41,6 +41,9 @@ export default class Card {
       this._like.classList.remove('elements__like_active');
     }
   }
+  isLiked() {
+    return this._likes.some((item) => item._id === this._userId);
+  }
 
   generateCard(){
     this._element = this._getTemplate();
@@ -54,9 +57,15 @@ export default class Card {
     this._image.alt = this._title;
     this._image.src = this._link;
     this._likesOutput.textContent = this._likes.length;
+
     if (this._ownerId !== this._userId) {
       this._deleteButton.classList.add('cards__delete-hidden');
     }
+    
+    if(this.isLiked()){
+      this._like.classList.add('elements__like_active')
+    }
+    
     this._setEventListeners();
 
     

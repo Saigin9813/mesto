@@ -48,11 +48,10 @@ const userInfo = new UserInfo({
 
 const popupAvatar = new PopupWithForm('.popup_content_edit-avatar',(formData)=>{
   popupAvatar.renderLoading(true);
-  console.log(formData)
   api.editAvatar(formData)
   .then((data) => {
     userInfo.setUserInfo(data);
-    console.log(data)
+    popupAvatar.close();
   })
   .catch((err)=>{
     console.log(err);
@@ -65,7 +64,7 @@ const popupAvatar = new PopupWithForm('.popup_content_edit-avatar',(formData)=>{
 popupAvatar.setEventListeners();
 
 editAvatarButton.addEventListener('click', () => {
-  formEditAvatarValidator._disabledButton();
+  formEditAvatarValidator.disabledButton();
   popupAvatar.open();
 })
 
@@ -74,13 +73,14 @@ const popupEdit = new PopupWithForm('.popup_content_edit-profile', (formData) =>
   api.editProfile(formData)
     .then((data) => {
       userInfo.setUserInfo(data);
+      popupEdit.close();
     })
     .catch((err) => console.log(err))
     .finally(() => popupEdit.renderLoading(false));
 });
 
 profileEditorButton.addEventListener('click', () => {
-  formEditValidator._disabledButton();
+  formEditValidator.disabledButton();
   popupEdit.setInputValues(userInfo.getUserInfo());
   popupEdit.open();
 });
@@ -89,17 +89,18 @@ popupEdit.setEventListeners();
 
 const popupAdd = new PopupWithForm('.popup_content_add-mesto', (formData) => {
   popupAdd.renderLoading(true);
-  formMestoValidator._disabledButton()
   api
     .addCard(formData)
     .then((data) => {
       cardSection.addItems(createCard(data));
+      popupAdd.close();
     })
     .catch((err) => console.log(err))
     .finally(() => popupAdd.renderLoading(false));
 });
 
 addMesoButton.addEventListener('click', ()=>{
+  formMestoValidator.disabledButton();
   popupAdd.open();
 })
 popupAdd.setEventListeners();

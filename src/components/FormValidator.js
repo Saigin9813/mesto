@@ -13,7 +13,7 @@ export default class FormValidator {
       inputElement.classList.remove(this._object.inputErrorClass);
       errorElement.textContent = inputElement.validationMessage;
   }
-  _disabledButton() {
+  disabledButton() {
       this._submitElement.disabled = 'disabled';
       this._submitElement.classList.add(this._object.inactiveButtonClass);
   }
@@ -24,7 +24,7 @@ export default class FormValidator {
 
   toggleButtonState = () => {
       this._hasInvalidInput()
-          ? this._disabledButton()
+          ? this.disabledButton()
           : this._enableButton();
   };
 
