@@ -1,7 +1,7 @@
 import './index.css';
 
-import { profileEditorButton,addMesoButton,inputTypeName,inputTypeProffesion,formEdit,formMesto } from "../utils/costants.js";
-import { initialCards, configFormSelector } from "../utils/costants.js";
+import { profileEditorButton,addMesoButton,editAvatarButton,inputTypeName,inputTypeProffesion,formEdit,formMesto,formEditAvatar,apiCofig } from "../utils/costants.js";
+import { configFormSelector } from "../utils/costants.js";
 
 import Card  from "../components/Card.js";
 import FormValidator from "../components/FormValidator.js";
@@ -9,95 +9,153 @@ import UserInfo from "../components/UserInfo.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import Section from "../components/Section.js";
+import Api from '../components/Api.js';
+import PopupWithConfirm from '../components/popupWithConfirm.js';
+
+let userId; 
 
 //Валадация форм 
 const formEditValidator = new FormValidator(configFormSelector,formEdit);
 const formMestoValidator = new FormValidator(configFormSelector,formMesto);
+const formEditAvatarValidator = new FormValidator(configFormSelector,formEditAvatar);
+
+formEditAvatarValidator.enableValidation();
 formMestoValidator.enableValidation();
 formEditValidator.enableValidation();
 
-
-const cardSection = new Section({
-  data: initialCards,
-  renderer: (item) =>{
-    cardSection.addItems(createCard(item));
-
- } }, ".element");
-
-const popupWithImage = new PopupWithImage('.popup_content_zoom-image');
+const api = new Api(apiCofig);
+const cardSection = new Section((item)=>{cardSection.addItems(createCard(item))},'.element')
 
 
 
-  const createCard = ({name,link}) => {
-  const card = new Card(name, link, '.elements-template',popupWithImage.open.bind(popupWithImage));
-  return card.generateCard();
-  }
 
-  cardSection.renderItems();
-
-
-const profilePopupWithForm = new PopupWithForm('.popup_content_edit-profile',
-  ({username,proffesion})=>{
-  userInfo.setUserInfo(username,proffesion);
-  formEditValidator._disabledButton();
+Promise.all([api.getUserInfo(),api.getInitialCard()])
+.then(([userData,initialCards])=>{
+  userId = userData._id;
+  userInfo.setUserInfo(userData);
+  cardSection.renderItems(initialCards.reverse());
+})
+.catch((err) =>{
+  console.log(err)
 });
+
 
 const userInfo = new UserInfo({
-  userName: '.profile__name',
-  userProffesion: '.profile__proffesion'
+  name: '.profile__name',
+  about: '.profile__proffesion',
+  avatar: '.profile__avatar'
 });
 
+const popupAvatar = new PopupWithForm('.popup_content_edit-avatar',(formData)=>{
+  popupAvatar.renderLoading(true);
+  console.log(formData)
+  api.editAvatar(formData)
+  .then((data) => {
+    userInfo.setUserInfo(data);
+    console.log(data)
+  })
+  .catch((err)=>{
+    console.log(err);
+  })
+  .finally(()=>{
+    popupAvatar.renderLoading(false);
+  })
+}
+);
+popupAvatar.setEventListeners();
 
-const mestoPopupWithForm = new PopupWithForm('.popup_content_add-mesto',
-({name,link})=>{
-  cardSection.addItems(createCard({name,link}));
+editAvatarButton.addEventListener('click', () => {
+  formEditAvatarValidator._disabledButton();
+  popupAvatar.open();
+})
+
+const popupEdit = new PopupWithForm('.popup_content_edit-profile', (formData) => {
+  popupEdit.renderLoading(true);
+  api.editProfile(formData)
+    .then((data) => {
+      userInfo.setUserInfo(data);
+    })
+    .catch((err) => console.log(err))
+    .finally(() => popupEdit.renderLoading(false));
+});
+
+profileEditorButton.addEventListener('click', () => {
+  formEditValidator._disabledButton();
+  popupEdit.setInputValues(userInfo.getUserInfo());
+  popupEdit.open();
+});
+popupEdit.setEventListeners();
+
+
+const popupAdd = new PopupWithForm('.popup_content_add-mesto', (formData) => {
+  popupAdd.renderLoading(true);
   formMestoValidator._disabledButton()
+  api
+    .addCard(formData)
+    .then((data) => {
+      cardSection.addItems(createCard(data));
+    })
+    .catch((err) => console.log(err))
+    .finally(() => popupAdd.renderLoading(false));
 });
 
+addMesoButton.addEventListener('click', ()=>{
+  popupAdd.open();
+})
+popupAdd.setEventListeners();
 
-profilePopupWithForm.setEventListeners();
-mestoPopupWithForm.setEventListeners();
+const popupConfirmation = new PopupWithConfirm('.popup_content_delete-image')
+popupConfirmation.setEventListeners();
+
+const popupWithImage = new PopupWithImage('.popup_content_zoom-image');
 popupWithImage.setEventListeners();
 
-profileEditorButton.addEventListener('click',()=>{
-const {userName,userProffesion} = userInfo.getUserInfo();
-inputTypeName.value = userName;
-inputTypeProffesion.value = userProffesion;
-profilePopupWithForm.open()
-});
 
-addMesoButton.addEventListener('click',mestoPopupWithForm.open.bind(mestoPopupWithForm))
+const createCard = (data) => {
+    const card = new Card(
+      data,
+      '.elements-template',
+      () => popupWithImage.open(data),
+      () => {
+        popupConfirmation.setConfirm(() => {
+          popupConfirmation.renderLoading(true);
+          api
+            .deleteCard(data._id)
+            .then(() => {
+              card._deleteCard();
+              popupConfirmation.close();
+            })
+            .catch((err) => console.log(err))
+            .finally(() => popupConfirmation.renderLoading(false))
+        })
+        popupConfirmation.open()
+      },
+      () => {
+        if (!card.isLiked()) {
+          api
+            .setLikes(data._id)
+            .then((data) => {
+              card.updateData(data);
+              card.updateLikesView();
+            })
+            .catch((err) => {
+              console.log(err);
+            })
+        } else {
+          api
+            .deleteLikes(data._id)
+            .then((data) => {
+              card.updateData(data);
+              card.updateLikesView();
+            })
+            .catch((err) => {
+              console.log(err);
+            })
+        }
+      },
+      userId,
+    )
+    return card.generateCard();
+  }
 
 
-form.addEventListener('submit', function submit(e) {
-  e.preventDefault();
-  search(form.elements.entity.value,form.elements.entityId.value)
-    .then(res =>{
-   if(res.statusText === 'OK'){
-     console.log('Все хорошо');
-   }
-  })
-});
-form.addEventListener('submit', function submit(e) {
-  e.preventDefault();
-  renderLoading(true)
-search(form.elements.entity.value, form.elements.entityId.value)
-    .then((res) => {
-      if (res.ok) {
-        return res.json(); // возвращаем вызов метода json
-      }
-
-      // иначе отклоняем промис, чтобы перейти в catch
-      return Promise.reject(res.status);
-    })
-    .then((res) => {
-      renderResult(res.name)
-    })
-    .catch((err) => {
-  renderError(`Ошибка: ${err}`)
-      // выведите в консоль сообщение: `Ошибка: ${err}`
-    })
-  .finally(() =>{
-    renderLoading(true)
-  });
-})
